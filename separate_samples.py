@@ -51,11 +51,8 @@ class Separate_samples():
             sublist_time = time[flag:indexes[i]]
             sublist_flux = flux[flag:indexes[i]]
 
-            sublist_time = pd.Series((v for v in sublist_time))
-            sublist_flux = pd.Series((v for v in sublist_flux))
-
-            sublist = sublist = zip(sublist_time, sublist_flux)
-            sublist = pd.Series((v for v in sublist))
+            d = {'mjd': sublist_time, 'flux': sublist_flux}
+            sublist = pd.DataFrame(d)
 
             final_list.append(sublist)
 
@@ -66,8 +63,8 @@ class Separate_samples():
             sublist_time = time[flag:time_length]
             sublist_flux = flux[flag:time_length]
 
-            sublist = sublist = zip(sublist_time, sublist_flux)
-            sublist = pd.Series((v for v in sublist))
+            d = {'mjd': sublist_time, 'flux': sublist_flux}
+            sublist = pd.DataFrame(d)
 
             final_list.append(sublist)
 
