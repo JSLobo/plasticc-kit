@@ -6,9 +6,9 @@ import pandas as pd
 class Separate_samples():
 
     def get_delta_time(self, time_series):
-        size = time_series.size
         delta_time = [(0, 0)]
-        for i in range(1, size):
+        time_series = time_series.tolist()
+        for i in range(1, len(time_series)):
             delta = (i, time_series[i] - time_series[i-1])
             delta_time.append(delta)
         return delta_time
@@ -46,7 +46,6 @@ class Separate_samples():
         flux = flux.tolist()
         index_length = len(indexes)
         time_length = len(time)
-        cols = ['mjd', 'flux']
 
         for i in range(0, index_length):
             sublist_time = time[flag:indexes[i]]
@@ -75,7 +74,6 @@ class Separate_samples():
         return final_list
 
     def get_separated_samples(self, object):
-        print(self)
         delta_time = self.get_delta_time(object['mjd'])
         delta_time_as_list = self.get_mjd_as_list(delta_time)
         outliers = self.detect_outliers(delta_time_as_list)
