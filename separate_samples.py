@@ -38,20 +38,29 @@ class Separate_samples():
                     indexes.append(t[0])
         return indexes
 
-    def get_intervals(self, time_series, flux, indexes):
+    def get_intervals(self, object, indexes):
+        mjd = object['mjd']
+        flux = object['flux']
+        passband = object['passband']
+
         flag = 0
         items = 0
+
         final_list = []
-        time = time_series.tolist()
+        time = mjd.tolist()
         flux = flux.tolist()
+
         index_length = len(indexes)
         time_length = len(time)
 
         for i in range(0, index_length):
             sublist_time = time[flag:indexes[i]]
             sublist_flux = flux[flag:indexes[i]]
+            sublist_passband = passband[flag:indexes[i]]
+            print(sublist_passband)
 
-            d = {'mjd': sublist_time, 'flux': sublist_flux}
+            d = {'mjd': sublist_time, 'flux': sublist_flux,
+                 'passband': sublist_passband}
             sublist = pd.DataFrame(d)
 
             final_list.append(sublist)
@@ -62,8 +71,11 @@ class Separate_samples():
         if items < time_length:
             sublist_time = time[flag:time_length]
             sublist_flux = flux[flag:time_length]
+            sublist_passband = passband[flag:time_length]
 
-            d = {'mjd': sublist_time, 'flux': sublist_flux}
+            d = {'mjd': sublist_time, 'flux': sublist_flux,
+                 'passband': sublist_passband}
+
             sublist = pd.DataFrame(d)
 
             final_list.append(sublist)
@@ -71,9 +83,10 @@ class Separate_samples():
         return final_list
 
     def get_separated_samples(self, object):
-        delta_time = self.get_delta_time(object['mjd'])
+        mjd = object['mjd']
+        delta_time = self.get_delta_time(mjd)
         delta_time_as_list = self.get_mjd_as_list(delta_time)
         outliers = self.detect_outliers(delta_time_as_list)
         indexes = self.get_indexes(delta_time, outliers)
-        samples = self.get_intervals(object['mjd'], object['flux'], indexes)
+        samples = self.get_intervals(object, indexes)
         return samples
